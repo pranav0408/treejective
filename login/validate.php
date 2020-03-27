@@ -9,18 +9,24 @@ $errors = array();
 //connect to database
 
 $db = mysqli_connect('localhost','root','','treejective') or die("couldn't connect to database");
+$mysqli = new mysqli('localhost', 'root', '', 'treejective') or die("couldn't connect to database");
 
 //registering user
 if(isset($_POST['signup']))
 {
+	
+	$username = mysqli_real_escape_string($db,$_POST['username']);
 	$first = mysqli_real_escape_string($db,$_POST['firstname']);
 	$last = mysqli_real_escape_string($db,$_POST['lastname']);
 	$email = mysqli_real_escape_string($db,$_POST['email']);
 	$pwd1 = mysqli_real_escape_string($db,$_POST['pwd']);
 	$pwd2 = mysqli_real_escape_string($db,$_POST['cpwd']);
-
+	$name = $first.' '.$last;
 	// form validation
 
+	if(empty($username)){ 
+		array_push($errors, "user's username is required");
+	}
 	if(empty($first)){ 
 		array_push($errors, "user's first name is required");
 	}
@@ -77,13 +83,20 @@ if(isset($_POST['signup']))
 
 	if(count($errors) == 0){
 		$password = md5($pwd1); // this will encrypt the password
-		$query = "INSERT INTO user (firstname , lastname , email, password) VALUES ('$first','$last', '$email', '$password')";
-		mysqli_query($db,$query);
-		$_SESSION['name'] = $first." ".$last;
-		$_SESSION['email'] = $email;
+		
+		$register = $mysqli->query("INSERT INTO users (username, password, full_name, email) VALUES ('$username', '$password', '$name', '$email')");
+		
+		if ($register) {
+			$query = "INSERT INTO user (firstname , lastname , email, password) VALUES ('$first','$last', '$email', '$password')";
+			mysqli_query($db,$query);
+			$_SESSION['username'] = $username;
+			$_SESSION['email'] = $email;
+			header('location: http://localhost:8080/mvc-php/php-project/main-page/');
+			exit;
+		} else {
+			die( $mysqli->error );
+		}
 
-		header('location: http://localhost:8080/mvc-php/php-project/main-page/');
-		exit;
 
 	}
 
@@ -100,17 +113,17 @@ if(isset($_POST['signup']))
 //LOGIN USER
 
 if(isset($_POST['loginuser'])){
-	$username = mysqli_real_escape_string($db, $_POST['username']);
+	$email = mysqli_real_escape_string($db, $_POST['email']);
 	$password = mysqli_real_escape_string($db, $_POST['userpwd']);
 
 // error checking
-	if(empty($username)){
-		array_push($errors, "username is required");
+	if(empty($email)){
+		array_push($errors, "email is required");
 	}
-	else if(!empty($username)){
-		$username = filter_var($username,FILTER_SANITIZE_EMAIL);
-		if(!filter_var($username, FILTER_VALIDATE_EMAIL)){
-			array_push($errors, "username is invalid");
+	else if(!empty($email)){
+		$email = filter_var($email,FILTER_SANITIZE_EMAIL);
+		if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+			array_push($errors, "email is invalid");
 		}	
 	}
 	if(empty($password)){
@@ -123,15 +136,25 @@ if(isset($_POST['loginuser'])){
 
 	if(count($errors) == 0){
 		$password = md5($password);
-		$query = "SELECT * FROM user WHERE email = '$username' AND password = '$password' ";
+		$query = "SELECT * FROM user WHERE email = '$email' AND password = '$password' ";
 		$result = mysqli_query($db, $query);
 		if(mysqli_num_rows($result)){
-			$_SESSION['email'] = $username;
-			header('location: http://localhost:8080/mvc-php/php-project/main-page/');
-			exit;
+			$result_data = $mysqli->query("SELECT username FROM users where `email` = '$email' ");
+			if( $result_data ){
+				$username = $result_data->fetch_assoc();
+				$username = $username['username'];
+				$_SESSION['username'] = $username; 
+				$_SESSION['email'] = $email;
+				
+				header('location: http://localhost:8080/mvc-php/php-project/main-page/');
+				exit;
+			}
+			else{
+				array_push($errors, "Can't fetch data: error 500");
+			}
 		}
 		else{
-			array_push($errors, "wrong username or password . Please try again");
+			array_push($errors, "wrong email or password . Please try again");
 		}
 	}
 

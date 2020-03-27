@@ -88,6 +88,14 @@ nav .nav-item{
 }
 #hamburger{
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+#hamburger h3{
+    margin: 4px auto;
+    color: #80BEA0;
 }
 button[id="session"]{
     background: none;

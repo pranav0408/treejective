@@ -94,24 +94,32 @@
             <a href="index.php">Treejective</a>
         </span>
         <ul class="nav-item">
-            <li> <button id="session">
-                    <?php 
-                        if( isset($_SESSION['email']) ){
-                            echo "<a href='destroy.php'>Logout</a>";
-                        }
-                        else{
-                            echo "<a href='../login/newlogin.php'>Login/Signup</a>";
-                        }
-                    ?>
-                </button> 
+            <li>
+                <?php 
+                    if( isset($_SESSION['email'])  && isset($_SESSION['username'])){
+                        echo "<a href='destroy.php'><button id='session'>Logout</button></a>";
+                    }
+                    else{
+                        echo "<a href='../login/newlogin.php'><button id='session'>Login/Signup</button></a>";
+                    }
+                ?>
             </li>
-            <li id="hamburger">
-                <svg width="50" height="37" viewBox="0 0 50 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.69696 3C18.8384 3 32.9798 3 47.1212 3" stroke="#80BEA0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M4.69696 18.2727C18.8384 18.2727 32.9798 18.2727 47.1212 18.2727" stroke="#80BEA0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M3 33.5455C10.3535 33.5455 17.7071 33.5455 25.0606 33.5455" stroke="#80BEA0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>                    
-            </li>
+            <?php 
+                if( isset($_SESSION['email']) && isset($_SESSION['username'])){
+                ?>
+                <a href="../Profile_management/profile.php">
+                    <li id="hamburger">
+                        <h3> <?php echo $_SESSION['username']; ?> </h3>
+                        <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M33.5094 0H3.49057C1.56278 0 0 1.56278 0 3.49057V33.5094C0 35.4372 1.56278 37 3.49057 37H33.5094C35.4372 37 37 35.4372 37 33.5094V3.49057C37 1.56278 35.4372 0 33.5094 0Z" fill="#80BEA0"/>
+                            <path d="M31.4151 30.0189V28.6429C31.4151 28.2568 31.1869 27.9113 30.8421 27.7744C26.7961 26.1653 22.3046 24.1673 21.9271 22.9226V21.6164C22.7664 20.7326 23.4284 19.5004 23.8203 18.0574C24.7615 17.3774 24.9956 15.9756 24.2164 14.9892V12.0655C24.2164 9.04756 22.5833 6.98114 18.8495 6.98114C15.2121 6.98114 13.4806 9.04756 13.4806 12.0655V14.9899C12.7032 15.9749 12.9367 17.376 13.8768 18.0567C14.2685 19.5004 14.931 20.7326 15.7709 21.6164V22.9219C15.3944 24.1659 10.9019 26.1639 6.85603 27.7737C6.51123 27.912 6.28302 28.2568 6.28302 28.6429V30.0189" stroke="white" stroke-width="2"/>
+                        </svg>
+                    </li>
+                </a>                 
+                <?php
+                }
+            ?>
+            
         </ul>
     </nav>
     <div class="img-container">

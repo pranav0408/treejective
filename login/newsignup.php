@@ -194,6 +194,7 @@
                 <h1 class="primary">create new account</h1>
                 <p>Come join our community ! let's set up your account.</p>
                 <div class="inputs">
+                    <input type="text" name="username" placeholder="User Name"><br>
                     <input type="text" name="firstname" placeholder="First Name"><br>
                     <input type="text" name="lastname" placeholder="Last Name"><br>
                     <input type="email" name="email" placeholder="Email"><br>
@@ -216,12 +217,12 @@
                 </div>
             </form>
             <div style="width: 1px;background-color: lightgrey;height: 80%;"></div>
-            <div class="social">
+            <!-- <div class="social">
                 <h3>Login with your social media account</h3>
                 <button class="ic-fb btn-login"><img src="https://www.freeiconspng.com/uploads/facebook-f-logo-white-background-21.jpg"> Login with Facebook</button>
                 <button class="ic-g btn-login"><img src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png"> Sign in with Google</button>
                 <button class="ic-g btn-login"><img src="https://image.flaticon.com/icons/svg/25/25231.svg"> Login with Github</button>
-            </div>
+            </div> -->
         </div>
     </div>
 </body>
